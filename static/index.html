@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indic Lens V2 - Minimal & Responsive</title>
+    <style>
+        :root {
+            --bg-color: #fcfcfc;
+            --surface: #ffffff;
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --accent: #1a202c;
+            --accent-hover: #4a5568;
+            --primary-blue: #3182ce;
+            --primary-blue-hover: #2b6cb0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2vw; /* Dynamic padding based on viewport width */
+            box-sizing: border-box;
+        }
+
+        /* Dynamic Container */
+        .container {
+            background-color: var(--surface);
+            width: 100%;
+            max-width: 600px; /* Expands up to 600px, shrinks to fit mobile */
+            padding: clamp(20px, 5vw, 40px); /* Responsive padding */
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: clamp(20px, 4vw, 30px);
+        }
+
+        header h1 {
+            font-size: clamp(1.25rem, 4vw, 1.5rem); /* Responsive font size */
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin: 0 0 8px 0;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* Instructions */
+        .instructions {
+            background-color: #f7fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px dashed var(--border);
+        }
+
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .instructions li span {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        /* Custom File Upload with Camera Icon */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Hide the default ugly file input */
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Style the label to look like a dropzone/button */
+        .custom-file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 30px 20px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .custom-file-upload:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background-color: #ebf8ff;
+        }
+
+        .custom-file-upload svg {
+            width: 32px;
+            height: 32px;
+            stroke: currentColor;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background-color: var(--surface);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            appearance: auto; /* Keeps default dropdown arrow styling but looks clean */
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .btn-start:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-start:active {
+            transform: scale(0.98);
+        }
+
+        /* Output Section */
+        .output-group {
+            margin-bottom: 20px;
+        }
+
+        .output-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap; /* Allows wrapping on very small screens */
+            gap: 10px;
+        }
+
+        .output-header label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+
+        .btn-voice {
+            background: #f1f5f9;
+            border: 1px solid transparent;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-voice:hover {
+            background-color: #e2e8f0;
+            border-color: var(--border);
+        }
+
+        .btn-voice svg {
+            width: 14px;
+            height: 14px;
+            stroke-width: 2.5;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px; /* Slightly taller default for dynamic scaling */
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: #f7fafc;
+            color: var(--text-main);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: var(--surface);
+            box-shadow: 0 0 0 3px rgba(26, 32, 44, 0.1);
+        }
+        .voice-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Media queries for larger screens to use a grid layout for outputs */
+        @media (min-width: 500px) {
+            .output-container {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Indic Lens V2</h1>
+            <p>Scan & translate Indian scripts</p>
+        </header>
+
+        <div class="instructions">
+            <ol>
+                <li><span>Upload Image:</span> Select the document or photo.</li>
+                <li><span>Select Target Language:</span> Choose your output language.</li>
+                <li><span>Press Start:</span> Click the button below to begin processing.</li>
+            </ol>
+        </div>
+
+        <div class="control-group">
+            <div class="file-upload-wrapper">
+                <input type="file" id="imageUpload" accept="image/*,capture=camera">
+                <label for="imageUpload" class="custom-file-upload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <span>Tap to upload or take a photo</span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <select id="targetLang">
+                <option value="" disabled selected>Select Target Language...</option>
+                <option value="hi">Hindi</option>
+                <option value="en">English</option>
+                <option value="bn">Bengali</option>
+                <option value="te">Telugu</option>
+                <option value="mr">Marathi</option>
+                <option value="ta">Tamil</option>
+            </select>
+        </div>
+
+        <button class="btn-start">Start</button>
+
+        <div class="output-container">
+            <div class="output-group">
+                <div class="output-header">
+                    <label>Extracted Text</label>
+                </div>
+                <textarea id="extractedText" placeholder="Original text will appear here..." readonly></textarea>
+            </div>
+
+            <div class="output-group">
+                <div class="output-header">
+                <label>Translated Text</label>
+                <div class="voice-controls">
+                    <button class="btn-voice" id="playBtn" title="Play">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        Listen
+                    </button>
+                    <button class="btn-voice hidden" id="pauseBtn" title="Pause/Resume">
+                        ⏸ Pause
+                    </button>
+                    <button class="btn-voice hidden" id="stopBtn" title="Stop">
+                        ⏹ Stop
+                    </button>
+                </div>
+            </div>
+                <textarea id="translatedText" placeholder="Translation will appear here..." readonly></textarea>
+            </div>
+        </div>
+    </div>
+       <script>
+                    const fileInput = document.getElementById('imageUpload');
+                    const uploadLabel = document.querySelector('.custom-file-upload');
+                    const uploadText = document.querySelector('.custom-file-upload span');
+                    const originalText = uploadText.textContent;
+
+                    // 1. Handle the file selection UI (from earlier)
+                    fileInput.addEventListener('change', function(e) {
+                        if (this.files && this.files.length > 0) {
+                            const fileName = this.files[0].name;
+                            uploadText.textContent = `Selected: ${fileName}`;
+                            uploadLabel.style.borderColor = 'var(--primary-blue)';
+                            uploadLabel.style.color = 'var(--primary-blue)';
+                            uploadLabel.style.backgroundColor = '#ebf8ff';
+                        } else {
+                            uploadText.textContent = originalText;
+                            uploadLabel.style.borderColor = '';
+                            uploadLabel.style.color = '';
+                            uploadLabel.style.backgroundColor = '';
+                        }
+                    });
+
+                    // 2. Handle the API request (Your updated script)
+                    const startBtn = document.querySelector('.btn-start');
+                    
+                    startBtn.addEventListener('click', async () => {
+                        const targetLang = document.getElementById('targetLang');
+                        const extractedText = document.getElementById('extractedText');
+                        const translatedText = document.getElementById('translatedText');
+
+                        if (!fileInput.files[0]) {
+                            alert('Please upload an image first');
+                            return;
+                        }
+                        if (!targetLang.value) {
+                            alert('Please select a target language');
+                            return;
+                        }
+
+                        // Lock UI while processing
+                        startBtn.disabled = true;
+                        startBtn.textContent = 'Processing...';
+                        startBtn.style.opacity = '0.7';
+                        startBtn.style.cursor = 'wait';
+                        
+                        extractedText.value = "Extracting script...";
+                        translatedText.value = "Awaiting translation...";
+
+                        const formData = new FormData();
+                        formData.append('file', fileInput.files[0]);
+
+                        try {
+                            const response = await fetch(`/api/v1/extract?target_language=${targetLang.value}`, {
+                                method: 'POST',
+                                body: formData
+                            });
+                            
+                            // Explicitly check for HTTP errors (e.g., 500 server error)
+                            if (!response.ok) {
+                                throw new Error(`Server responded with status ${response.status}`);
+                            }
+
+                            const data = await response.json();
+
+                            extractedText.value = data.extracted_text || "No text extracted.";
+                            translatedText.value = data.translated_text || "No translation available.";
+                            
+                        } catch (error) {
+                            console.error("API Error:", error);
+                            extractedText.value = "Error processing image. Check console for details.";
+                            translatedText.value = "";
+                        } finally {
+                            // Restore UI after completion or error
+                            startBtn.disabled = false;
+                            startBtn.textContent = 'Start';
+                            startBtn.style.opacity = '1';
+                            startBtn.style.cursor = 'pointer';
+                        }
+                    });
+                    // --- Voiceover Feature ---
+   // --- Upgraded Voiceover Feature (Play, Pause, Stop) ---
+   // --- Bulletproof Voiceover Feature ---
+    // --- Bulletproof Voiceover Feature ---
+    const synth = window.speechSynthesis;
+    let currentUtterance = null; 
+
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const stopBtn = document.getElementById('stopBtn');
+
+    function resetVoiceUI() {
+        playBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width: 14px; height: 14px;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> Listen';
+        playBtn.classList.remove('hidden');
+        pauseBtn.classList.add('hidden');
+        stopBtn.classList.add('hidden');
+        pauseBtn.textContent = '⏸ Pause';
+    }
+
+    playBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Resume if paused
+        if (synth.paused && synth.speaking) {
+            synth.resume();
+            pauseBtn.textContent = '⏸ Pause';
+            return;
+        }
+
+        // Restart if it got stuck
+        if (synth.speaking) {
+            synth.cancel();
+            setTimeout(startSpeaking, 100);
+        } else {
+            startSpeaking();
+        }
+    });
+
+    function startSpeaking() {
+        const translatedText = document.getElementById('translatedText').value;
+        const selectedLang = document.getElementById('targetLang').value;
+
+        if (!translatedText || translatedText.includes("appear here") || translatedText.includes("Awaiting")) {
+            alert("Please translate some text first!");
+            return;
+        }
+
+        synth.cancel();
+        currentUtterance = new SpeechSynthesisUtterance(translatedText);
+        
+        const langCodes = {
+            'hi': 'hi-IN', 'en': 'en-IN', 'bn': 'bn-IN',
+            'te': 'te-IN', 'mr': 'mr-IN', 'ta': 'ta-IN'
+        };
+        
+        currentUtterance.lang = langCodes[selectedLang] || 'hi-IN';
+        currentUtterance.rate = 0.9;
+        currentUtterance.pitch = 1.0;
+
+        currentUtterance.onend = function() {
+            resetVoiceUI();
+        };
+        
+        currentUtterance.onerror = function(event) {
+            console.error("Speech error occurred:", event);
+            resetVoiceUI();
+        };
+
+        synth.speak(currentUtterance);
+        
+        playBtn.classList.add('hidden');
+        pauseBtn.classList.remove('hidden');
+        stopBtn.classList.remove('hidden');
+    }
+
+    pauseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            pauseBtn.textContent = '▶ Resume';
+        } else if (synth.paused) {
+            synth.resume();
+            pauseBtn.textContent = '⏸ Pause';
+        }
+    });
+
+    stopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        synth.cancel(); 
+        
+        // Force the browser out of its hidden "paused" state
+        setTimeout(() => { 
+            synth.resume(); 
+        }, 50);
+        
+        resetVoiceUI();
+    });
+</script>
+
+</body>
+</html>
